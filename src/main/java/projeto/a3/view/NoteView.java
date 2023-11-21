@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package projeto.a3;
+package projeto.a3.view;
 
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -15,7 +15,7 @@ import javax.swing.JOptionPane;
  *
  * @author 82323467
  */
-public class Notepad extends javax.swing.JFrame {
+public class NoteView extends javax.swing.JFrame {
 
     private ArrayList<Note> annotations = new ArrayList<>();
     private DefaultListModel<String> noteList = new DefaultListModel<>();
@@ -23,7 +23,7 @@ public class Notepad extends javax.swing.JFrame {
     /**
      * Creates new form Notepad
      */
-    public Notepad() {
+    public NoteView() {
         initComponents();
         
         NoteList.setModel(noteList);
@@ -255,20 +255,21 @@ public class Notepad extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Notepad.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(NoteView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Notepad.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(NoteView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Notepad.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(NoteView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Notepad.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(NoteView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Notepad().setVisible(true);
+                new NoteView().setVisible(true);
             }
         });
     }
