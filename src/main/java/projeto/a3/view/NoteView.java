@@ -1,121 +1,22 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
 package projeto.a3.view;
 
-import java.util.ArrayList;
-import java.util.Enumeration;
-import javax.swing.AbstractButton;
-import javax.swing.ButtonGroup;
-import javax.swing.DefaultListModel;
-import javax.swing.JOptionPane;
-
 /**
  *
- * @author 82323467
+ * @author pc
  */
-public class NoteView extends javax.swing.JFrame {
+public class NoteView extends javax.swing.JPanel {
 
-    private ArrayList<Note> annotations = new ArrayList<>();
-    private DefaultListModel<String> noteList = new DefaultListModel<>();
-    
     /**
-     * Creates new form Notepad
+     * Creates new form a
      */
     public NoteView() {
         initComponents();
-        
-        NoteList.setModel(noteList);
-        NoteList.addListSelectionListener((e) -> {
-            int selected = NoteList.getSelectedIndex();
-            if (selected >= 0) { 
-                // Enable Text Fields
-                selectNote(selected);
-                Title.setEnabled(true);
-                TextEditor.setEnabled(true);
-                // Enable all selection dependant buttons like Delete, Clear and Save
-                Enumeration<AbstractButton> noteButtons = NoteButtons.getElements();
-                while (noteButtons.hasMoreElements()) {
-                    noteButtons.nextElement().setEnabled(true);
-                }
-            } else {
-                // Disable Text Fields
-                Title.setEnabled(false);
-                TextEditor.setEnabled(false);
-                // Disable all selection dependant buttons like Delete, Clear and Save
-                Enumeration<AbstractButton> noteButtons = NoteButtons.getElements();
-                while (noteButtons.hasMoreElements()) {
-                    noteButtons.nextElement().setEnabled(true);
-                }
-            }
-        });
-        // Note Creation button
-        NewButtom.addActionListener((e) -> {
-            String name = "NovaNota";
-            ArrayList<String> notesNames = new ArrayList<>();
-            for (int i=0; i<annotations.size(); i++) {
-                notesNames.add(annotations.get(i).getTitle());
-            }
-            int counter = 0;
-            while (notesNames.contains(name)) name = "Nova Nota" + ++counter;
-            annotations.add(new Note(name, "Nova Anotação"));
-            updateSideList();
-            selectNote(0);
-        });
-        // Note List Clear Button
-        DeleteAllButtom.addActionListener((e) -> {
-            if (JOptionPane.OK_OPTION == JOptionPane.showConfirmDialog(this, "Deseja mesmo deletar "+NoteList.getSelectedValue()+"?", "Deletar", JOptionPane.OK_CANCEL_OPTION)) {
-                annotations.clear();
-                Title.setText("");
-                TextEditor.setText("");
-                updateSideList();
-            }
-        });
-        // Delete Note Button
-        DeleteButtom.addActionListener((e) -> {
-            if (JOptionPane.OK_OPTION == JOptionPane.showConfirmDialog(this, "Deseja mesmo deletar "+NoteList.getSelectedValue()+"?", "Deletar", JOptionPane.OK_CANCEL_OPTION)) {
-                annotations.remove(NoteList.getSelectedIndex());
-                Title.setText("");
-                Title.setEnabled(false);
-                TextEditor.setText("");
-                TextEditor.setEnabled(false);
-                updateSideList();
-            }
-        });
-        // Save Note Changes
-        SaveButton.addActionListener((e) -> {
-            Note note = annotations.get(NoteList.getSelectedIndex());
-            note.setTitle(Title.getText());
-            note.setContent(TextEditor.getText());
-            updateSideList();
-        });
-        // Clear Text Field
-        ClearButton.addActionListener((e) -> {
-            TextEditor.setText("");
-        });
-    }
-    
-    private void updateSideList() {
-        int selected = NoteList.getSelectedIndex();
-        int size = noteList.size();
-        noteList.removeAllElements();
-        ArrayList<String> notesNames = new ArrayList<>();
-        for (int i=0; i<annotations.size(); i++) {
-            notesNames.add(annotations.get(i).getTitle());
-        }
-        noteList.addAll(notesNames);
-        if (size >= noteList.size()){
-            NoteList.setSelectedIndex(selected);
-        }
     }
 
-    private void selectNote(int index) {
-        NoteList.setSelectedIndex(index);
-        Title.setText(annotations.get(index).getTitle());
-        TextEditor.setText(annotations.get(index).getContent());
-    }
-    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -125,7 +26,6 @@ public class NoteView extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        NoteButtons = new javax.swing.ButtonGroup();
         Title = new javax.swing.JTextField();
         MainPanel = new javax.swing.JScrollPane();
         TextEditor = new javax.swing.JEditorPane();
@@ -136,10 +36,6 @@ public class NoteView extends javax.swing.JFrame {
         SaveButton = new javax.swing.JButton();
         ClearButton = new javax.swing.JButton();
         DeleteButtom = new javax.swing.JButton();
-        MenuBar = new javax.swing.JMenuBar();
-        Menu = new javax.swing.JMenu();
-
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         Title.setToolTipText("");
         Title.setEnabled(false);
@@ -161,15 +57,12 @@ public class NoteView extends javax.swing.JFrame {
         });
 
         SaveButton.setText("Salvar");
-        NoteButtons.add(SaveButton);
         SaveButton.setEnabled(false);
 
         ClearButton.setText("Limpar");
-        NoteButtons.add(ClearButton);
         ClearButton.setEnabled(false);
 
         DeleteButtom.setText("Deletar");
-        NoteButtons.add(DeleteButtom);
         DeleteButtom.setEnabled(false);
         DeleteButtom.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -177,13 +70,8 @@ public class NoteView extends javax.swing.JFrame {
             }
         });
 
-        Menu.setText("jMenu1");
-        MenuBar.add(Menu);
-
-        setJMenuBar(MenuBar);
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -197,7 +85,7 @@ public class NoteView extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 234, Short.MAX_VALUE)
+                        .addGap(0, 155, Short.MAX_VALUE)
                         .addComponent(DeleteButtom)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(ClearButton)
@@ -216,7 +104,7 @@ public class NoteView extends javax.swing.JFrame {
                         .addComponent(Title, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(MainPanel))
-                    .addComponent(SidePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 236, Short.MAX_VALUE))
+                    .addComponent(SidePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 259, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(SaveButton)
@@ -226,81 +114,23 @@ public class NoteView extends javax.swing.JFrame {
                     .addComponent(DeleteAllButtom))
                 .addContainerGap())
         );
-
-        pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void DeleteButtomActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteButtomActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_DeleteButtomActionPerformed
 
     private void DeleteAllButtomActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteAllButtomActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_DeleteAllButtomActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(NoteView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(NoteView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(NoteView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(NoteView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
+    private void DeleteButtomActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteButtomActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_DeleteButtomActionPerformed
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new NoteView().setVisible(true);
-            }
-        });
-    }
-    
-    class Note {
-        private String title;
-        private String content;
-        
-        public Note(String title, String content) {
-            this.title = title;
-            this.content = content;
-        }
-        
-        public String getTitle() { return this.title; }
-        
-        public void setTitle(String title) { this.title = title; }
-        
-        public String getContent() { return this.content; }
-                
-        public void setContent(String content) { this.content = content; }
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ClearButton;
     private javax.swing.JButton DeleteAllButtom;
     private javax.swing.JButton DeleteButtom;
     private javax.swing.JScrollPane MainPanel;
-    private javax.swing.JMenu Menu;
-    private javax.swing.JMenuBar MenuBar;
     private javax.swing.JButton NewButtom;
-    private javax.swing.ButtonGroup NoteButtons;
     private javax.swing.JList<String> NoteList;
     private javax.swing.JButton SaveButton;
     private javax.swing.JScrollPane SidePanel;
