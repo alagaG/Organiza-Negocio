@@ -5,6 +5,12 @@
 package projeto.a3.main;
 
 import java.awt.CardLayout;
+import javax.swing.JOptionPane;
+import projeto.a3.ConnectionFactory;
+import projeto.a3.controller.NoteController;
+import projeto.a3.controller.UserController;
+import projeto.a3.model.NoteModel;
+import projeto.a3.model.UserModel;
 import projeto.a3.view.NoteView;
 
 /**
@@ -13,13 +19,27 @@ import projeto.a3.view.NoteView;
  */
 public class MainView extends javax.swing.JFrame {
 
+    private static MainView instance;
+    private static UserModel user;
+    private UserController controller = new UserController();
+    
     /**
      * Creates new form MainFrame
      */
     public MainView() {
-        initComponents();
-        
-        
+        instance = this;
+        user = controller.read("Teste", "123");
+        while (user == null) {
+            String username = JOptionPane.showInputDialog("Insira o nome de usuário: ");
+            if (username == null) break;
+            String password = JOptionPane.showInputDialog("Insira a senha: ");
+            if (password == null) break;
+            user = controller.read(username, password);
+            System.out.println(user);
+        }
+        if (user != null) {
+            initComponents();
+        }
     }
 
     /**
@@ -32,14 +52,14 @@ public class MainView extends javax.swing.JFrame {
     private void initComponents() {
 
         cardPanel = new javax.swing.JPanel();
-        note = new projeto.a3.view.NoteView();
-        employee = new projeto.a3.view.EmployeeView();
         schedule = new projeto.a3.view.ScheduleView();
-        client = new projeto.a3.view.ClientView();
+        costumer = new projeto.a3.view.CostumerView();
+        employee = new projeto.a3.view.EmployeeView();
+        note = new projeto.a3.view.NoteView();
         menuBar = new javax.swing.JMenuBar();
         jMenu3 = new javax.swing.JMenu();
         notesLink = new javax.swing.JMenuItem();
-        clientsLink = new javax.swing.JMenuItem();
+        costumerLink = new javax.swing.JMenuItem();
         employeeLink = new javax.swing.JMenuItem();
         scheduleLink = new javax.swing.JMenuItem();
 
@@ -47,17 +67,11 @@ public class MainView extends javax.swing.JFrame {
 
         cardPanel.setLayout(new java.awt.CardLayout());
 
-        note.setName("note"); // NOI18N
-        cardPanel.add(note, "note");
-
-        employee.setName("employee"); // NOI18N
-        cardPanel.add(employee, "employee");
-
         javax.swing.GroupLayout scheduleLayout = new javax.swing.GroupLayout(schedule);
         schedule.setLayout(scheduleLayout);
         scheduleLayout.setHorizontalGroup(
             scheduleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 687, Short.MAX_VALUE)
+            .addGap(0, 711, Short.MAX_VALUE)
         );
         scheduleLayout.setVerticalGroup(
             scheduleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -65,7 +79,15 @@ public class MainView extends javax.swing.JFrame {
         );
 
         cardPanel.add(schedule, "schedule");
-        cardPanel.add(client, "client");
+
+        costumer.setName("costumer"); // NOI18N
+        cardPanel.add(costumer, "costumer");
+
+        employee.setName("employee"); // NOI18N
+        cardPanel.add(employee, "employee");
+
+        note.setName("note"); // NOI18N
+        cardPanel.add(note, "note");
 
         jMenu3.setText("jMenu3");
 
@@ -77,13 +99,13 @@ public class MainView extends javax.swing.JFrame {
         });
         jMenu3.add(notesLink);
 
-        clientsLink.setText("Clientes");
-        clientsLink.addActionListener(new java.awt.event.ActionListener() {
+        costumerLink.setText("Clientes");
+        costumerLink.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                clientsLinkActionPerformed(evt);
+                costumerLinkActionPerformed(evt);
             }
         });
-        jMenu3.add(clientsLink);
+        jMenu3.add(costumerLink);
 
         employeeLink.setText("Funcionários");
         employeeLink.addActionListener(new java.awt.event.ActionListener() {
@@ -109,10 +131,10 @@ public class MainView extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(cardPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 687, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(cardPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -126,13 +148,15 @@ public class MainView extends javax.swing.JFrame {
 
     private void notesLinkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_notesLinkActionPerformed
         CardLayout layout = (CardLayout)cardPanel.getLayout();
+        note.updateView();
         layout.show(cardPanel, note.getName());
     }//GEN-LAST:event_notesLinkActionPerformed
 
-    private void clientsLinkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clientsLinkActionPerformed
+    private void costumerLinkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_costumerLinkActionPerformed
         CardLayout layout = (CardLayout)cardPanel.getLayout();
-        layout.show(cardPanel, client.getName());
-    }//GEN-LAST:event_clientsLinkActionPerformed
+        costumer.updateView();
+        layout.show(cardPanel, costumer.getName());
+    }//GEN-LAST:event_costumerLinkActionPerformed
 
     private void employeeLinkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_employeeLinkActionPerformed
         CardLayout layout = (CardLayout)cardPanel.getLayout();
@@ -144,6 +168,10 @@ public class MainView extends javax.swing.JFrame {
         layout.show(cardPanel, schedule.getName());
     }//GEN-LAST:event_scheduleLinkActionPerformed
 
+    public static UserModel getUser() {
+        return user;
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -175,15 +203,17 @@ public class MainView extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MainView().setVisible(true);
+                MainView main = new MainView();
+                main.setVisible(true);
+                if (MainView.getUser() == null) main.dispose();
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel cardPanel;
-    private projeto.a3.view.ClientView client;
-    private javax.swing.JMenuItem clientsLink;
+    private projeto.a3.view.CostumerView costumer;
+    private javax.swing.JMenuItem costumerLink;
     private projeto.a3.view.EmployeeView employee;
     private javax.swing.JMenuItem employeeLink;
     private javax.swing.JMenu jMenu3;

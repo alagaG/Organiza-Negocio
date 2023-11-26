@@ -7,6 +7,7 @@ package projeto.a3.controller;
 import projeto.a3.model.AbstractController;
 
 import java.sql.*;
+import java.util.List;
 import projeto.a3.ConnectionFactory;
 import projeto.a3.model.ScheduleModel;
 
@@ -35,10 +36,15 @@ public class ScheduleController extends AbstractController<ScheduleModel> {
     }
 
     @Override
-    public ScheduleModel read(ScheduleModel data) {
+    public ScheduleModel read(int id) {
         return null;
     }
 
+    @Override
+    public ScheduleModel[] readAll() { 
+        return null;
+    }
+    
     @Override
     public void update(ScheduleModel lastData, ScheduleModel newData) {
         Connection connection = ConnectionFactory.getConnection();

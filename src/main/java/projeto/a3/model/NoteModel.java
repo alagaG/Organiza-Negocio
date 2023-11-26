@@ -44,4 +44,8 @@ public class NoteModel {
         return this.content;
     }
     
+    public String toString() {
+        return "%d | %d | %d | %s | %s".formatted(getID(), getUserID(), getClientID(), getTitle(), getContent());
+    }
+    
 }

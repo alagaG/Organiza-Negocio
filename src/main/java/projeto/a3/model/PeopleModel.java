@@ -13,6 +13,8 @@ public class PeopleModel {
     private int id;
     private int userId;
     private String name;
+    private String cpf;
+    private String phone;
     private Role role;
     private String description;
     
@@ -21,10 +23,12 @@ public class PeopleModel {
         EMPLOYEE
     }
 
-    public PeopleModel(int id, int userId, String name, Role role, String description) {
+    public PeopleModel(int id, int userId, String name, String cpf, String phone, Role role, String description) {
         this.id = id;
         this.userId = userId;
         this.name = name;
+        this.cpf = cpf;
+        this.phone = phone;
         this.role = role;
         this.description = description;
     }
@@ -39,6 +43,14 @@ public class PeopleModel {
     
     public String getName() {
         return this.name;
+    }
+    
+    public String getCPF() {
+        return this.cpf;
+    }
+    
+    public String getPhone() {
+        return this.phone;
     }
     
     public Role getRole() {

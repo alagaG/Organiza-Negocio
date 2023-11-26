@@ -4,17 +4,31 @@
  */
 package projeto.a3.view;
 
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
+import projeto.a3.controller.NoteController;
+import projeto.a3.main.MainView;
+import projeto.a3.model.NoteModel;
+import projeto.a3.model.PeopleModel;
+
 /**
  *
  * @author pc
  */
 public class NoteView extends javax.swing.JPanel {
 
+    private static NoteView instance;
+    private NoteController controller = new NoteController(); 
+    private NoteModel[] data = new NoteModel[0];
+    
     /**
      * Creates new form a
      */
     public NoteView() {
+        instance = this;
         initComponents();
+        updateView();
     }
 
     /**
@@ -26,47 +40,70 @@ public class NoteView extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        Title = new javax.swing.JTextField();
-        MainPanel = new javax.swing.JScrollPane();
-        TextEditor = new javax.swing.JEditorPane();
-        SidePanel = new javax.swing.JScrollPane();
-        NoteList = new javax.swing.JList<>();
-        NewButtom = new javax.swing.JButton();
-        DeleteAllButtom = new javax.swing.JButton();
-        SaveButton = new javax.swing.JButton();
-        ClearButton = new javax.swing.JButton();
-        DeleteButtom = new javax.swing.JButton();
+        title = new javax.swing.JTextField();
+        clientSelector = new javax.swing.JComboBox<>();
+        mainPanel = new javax.swing.JScrollPane();
+        textEditor = new javax.swing.JEditorPane();
+        sidePanel = new javax.swing.JScrollPane();
+        noteList = new javax.swing.JList<>();
+        newButtom = new javax.swing.JButton();
+        deleteAllButtom = new javax.swing.JButton();
+        saveButton = new javax.swing.JButton();
+        clearButton = new javax.swing.JButton();
+        deleteButtom = new javax.swing.JButton();
 
-        Title.setToolTipText("");
-        Title.setEnabled(false);
+        title.setToolTipText("");
+        title.setEnabled(false);
 
-        MainPanel.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        clientSelector.setEnabled(false);
 
-        TextEditor.setEnabled(false);
-        MainPanel.setViewportView(TextEditor);
+        mainPanel.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
-        SidePanel.setViewportView(NoteList);
+        textEditor.setEnabled(false);
+        mainPanel.setViewportView(textEditor);
 
-        NewButtom.setText("Novo");
+        noteList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                noteListValueChanged(evt);
+            }
+        });
+        sidePanel.setViewportView(noteList);
 
-        DeleteAllButtom.setText("Limpar");
-        DeleteAllButtom.addActionListener(new java.awt.event.ActionListener() {
+        newButtom.setText("Novo");
+        newButtom.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                DeleteAllButtomActionPerformed(evt);
+                newButtomActionPerformed(evt);
             }
         });
 
-        SaveButton.setText("Salvar");
-        SaveButton.setEnabled(false);
-
-        ClearButton.setText("Limpar");
-        ClearButton.setEnabled(false);
-
-        DeleteButtom.setText("Deletar");
-        DeleteButtom.setEnabled(false);
-        DeleteButtom.addActionListener(new java.awt.event.ActionListener() {
+        deleteAllButtom.setText("Limpar");
+        deleteAllButtom.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                DeleteButtomActionPerformed(evt);
+                deleteAllButtomActionPerformed(evt);
+            }
+        });
+
+        saveButton.setText("Salvar");
+        saveButton.setEnabled(false);
+        saveButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveButtonActionPerformed(evt);
+            }
+        });
+
+        clearButton.setText("Limpar");
+        clearButton.setEnabled(false);
+        clearButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                clearButtonActionPerformed(evt);
+            }
+        });
+
+        deleteButtom.setText("Deletar");
+        deleteButtom.setEnabled(false);
+        deleteButtom.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteButtomActionPerformed(evt);
             }
         });
 
@@ -78,21 +115,24 @@ public class NoteView extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(NewButtom, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(newButtom, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(DeleteAllButtom))
-                    .addComponent(SidePanel, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(deleteAllButtom))
+                    .addComponent(sidePanel, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(0, 155, Short.MAX_VALUE)
-                        .addComponent(DeleteButtom)
+                        .addComponent(deleteButtom)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(ClearButton)
+                        .addComponent(clearButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(SaveButton))
-                    .addComponent(Title)
-                    .addComponent(MainPanel))
+                        .addComponent(saveButton))
+                    .addComponent(mainPanel)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(title, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(clientSelector, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -101,40 +141,125 @@ public class NoteView extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(Title, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(title, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(clientSelector, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(MainPanel))
-                    .addComponent(SidePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 259, Short.MAX_VALUE))
+                        .addComponent(mainPanel))
+                    .addComponent(sidePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 259, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(SaveButton)
-                    .addComponent(ClearButton)
-                    .addComponent(NewButtom)
-                    .addComponent(DeleteButtom)
-                    .addComponent(DeleteAllButtom))
+                    .addComponent(saveButton)
+                    .addComponent(clearButton)
+                    .addComponent(newButtom)
+                    .addComponent(deleteButtom)
+                    .addComponent(deleteAllButtom))
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void DeleteAllButtomActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteAllButtomActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_DeleteAllButtomActionPerformed
+    private void deleteAllButtomActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteAllButtomActionPerformed
+        if (JOptionPane.YES_OPTION != JOptionPane.showConfirmDialog(this, "Quer mesmo deletar todas as notas?")) return;
+        controller.deleteAll(new NoteModel(0, MainView.getUser().getID(), 0, "", ""));
+        updateView();
+    }//GEN-LAST:event_deleteAllButtomActionPerformed
 
-    private void DeleteButtomActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteButtomActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_DeleteButtomActionPerformed
+    private void deleteButtomActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtomActionPerformed
+        if (JOptionPane.YES_OPTION != JOptionPane.showConfirmDialog(this, "Quer mesmo deletar essa nota?")) return;
+        controller.delete(data[noteList.getSelectedIndex()]);
+        updateView();
+    }//GEN-LAST:event_deleteButtomActionPerformed
 
+    private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
+        int noteIndex = noteList.getSelectedIndex();
+        NoteModel oldData = data[noteIndex];
+        NoteModel newData = new NoteModel(
+                oldData.getID(), 
+                oldData.getUserID(), 
+                clientSelector.getSelectedIndex() > 0 ? CostumerView.getInstance().getData()[clientSelector.getSelectedIndex() - 1].getID() : 0, 
+                title.getText(), 
+                textEditor.getText());
+        controller.update(oldData, newData);
+        updateView();
+        noteList.setSelectedIndex(noteIndex);
+    }//GEN-LAST:event_saveButtonActionPerformed
+
+    private void clearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearButtonActionPerformed
+        textEditor.setText("");
+    }//GEN-LAST:event_clearButtonActionPerformed
+
+    private void newButtomActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newButtomActionPerformed
+        controller.create(new NoteModel(0, MainView.getUser().getID(), 0, "Nova Nota", ""));
+        updateView();
+    }//GEN-LAST:event_newButtomActionPerformed
+
+    private void noteListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_noteListValueChanged
+        if (evt.getValueIsAdjusting()) {
+            saveButton.setEnabled(false);
+            deleteButtom.setEnabled(false);
+            clearButton.setEnabled(false);
+            clientSelector.setEnabled(false);
+        } else {
+            int noteIndex = noteList.getSelectedIndex();
+            boolean selected = noteIndex > -1;
+            saveButton.setEnabled(selected);
+            deleteButtom.setEnabled(selected);
+            clearButton.setEnabled(selected);
+            title.setEnabled(selected);
+            textEditor.setEnabled(selected);
+            title.setText(selected ? data[noteIndex].getTitle() : "");
+            clientSelector.setEnabled(selected);
+            DefaultComboBoxModel<String> clientModel = new DefaultComboBoxModel();
+            clientSelector.setModel(clientModel);
+            clientModel.addElement("");
+            PeopleModel[] costumerData = CostumerView.getInstance().getData();
+            for (int i=0; i<costumerData.length; i++) {
+                PeopleModel costumer = costumerData[i];
+                clientModel.addElement(costumer.getName());
+            }
+            
+            for (int i=0; i<costumerData.length; i++) {
+                PeopleModel costumer = costumerData[i];
+                if (costumer.getID() > 0 && (selected ? data[noteIndex].getClientID() : 0) == costumer.getID()) clientSelector.setSelectedIndex(i + 1);
+            }
+            textEditor.setText(selected ? data[noteIndex].getContent() : "");
+        }
+    }//GEN-LAST:event_noteListValueChanged
+
+    public void updateView() {
+        data = controller.readAll();
+        
+        DefaultListModel listModel = new DefaultListModel();
+        noteList.setModel(listModel);
+
+        for (int i=0; i<data.length; i++) {
+            listModel.add(i, data[i].getTitle());
+        }
+    }
+    
+    public static NoteView getInstance() {
+        return instance;
+    }
+    
+    public NoteModel[] getData() {
+        return data.clone();
+    }
+    
+    public NoteController getController() {
+        return controller;
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton ClearButton;
-    private javax.swing.JButton DeleteAllButtom;
-    private javax.swing.JButton DeleteButtom;
-    private javax.swing.JScrollPane MainPanel;
-    private javax.swing.JButton NewButtom;
-    private javax.swing.JList<String> NoteList;
-    private javax.swing.JButton SaveButton;
-    private javax.swing.JScrollPane SidePanel;
-    private javax.swing.JEditorPane TextEditor;
-    private javax.swing.JTextField Title;
+    private javax.swing.JButton clearButton;
+    private javax.swing.JComboBox<String> clientSelector;
+    private javax.swing.JButton deleteAllButtom;
+    private javax.swing.JButton deleteButtom;
+    private javax.swing.JScrollPane mainPanel;
+    private javax.swing.JButton newButtom;
+    private javax.swing.JList<String> noteList;
+    private javax.swing.JButton saveButton;
+    private javax.swing.JScrollPane sidePanel;
+    private javax.swing.JEditorPane textEditor;
+    private javax.swing.JTextField title;
     // End of variables declaration//GEN-END:variables
 }

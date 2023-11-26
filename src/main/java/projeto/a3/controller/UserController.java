@@ -7,6 +7,7 @@ package projeto.a3.controller;
 import projeto.a3.model.AbstractController;
 
 import java.sql.*;
+import java.util.List;
 import projeto.a3.ConnectionFactory;
 import projeto.a3.model.UserModel;
 
@@ -31,7 +32,31 @@ public class UserController extends AbstractController<UserModel> {
     }
 
     @Override
-    public UserModel read(UserModel data) {
+    public UserModel read(int id) {
+        return null;
+    }
+    
+    public UserModel read(String name, String password) {
+        Connection connection = ConnectionFactory.getConnection();
+        String query = "SELECT * FROM users WHERE name = ? AND password = ?;";
+        try {
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setString(1, name);
+            statement.setString(2, password);
+            ResultSet queryResult = statement.executeQuery();
+            if (queryResult.next()) {
+                return new UserModel(queryResult.getInt("id"), queryResult.getString("name"), queryResult.getString("password"));
+            } else {
+                return null;
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    
+    @Override
+    public UserModel[] readAll() { 
         return null;
     }
 

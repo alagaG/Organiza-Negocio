@@ -6,26 +6,33 @@ package projeto.a3.view;
 
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import projeto.a3.controller.PeopleController;
 import projeto.a3.main.MainView;
+import projeto.a3.model.NoteModel;
 import projeto.a3.model.PeopleModel;
 
 /**
  *
  * @author 823135307
  */
-public class EmployeeView extends javax.swing.JPanel {
+public class CostumerView extends javax.swing.JPanel {
 
-    private static EmployeeView instance;
+    private static CostumerView instance;
     private PeopleController controller = new PeopleController();
-    private PeopleModel[] data;
+    private PeopleModel[] data = new PeopleModel[0];
     
     /**
      * Creates new form TrabalhoA3
      */
-    public EmployeeView() {
+    public CostumerView() {
+        instance = this;
         initComponents();
+        table.getSelectionModel().addListSelectionListener(e -> tableSelectionChange(e));
         updateView();
     }
 
@@ -54,6 +61,8 @@ public class EmployeeView extends javax.swing.JPanel {
         labelDescription = new javax.swing.JLabel();
         descriptionPane = new javax.swing.JScrollPane();
         description = new javax.swing.JTextArea();
+
+        setName("client"); // NOI18N
 
         table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -176,25 +185,21 @@ public class EmployeeView extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 711, Short.MAX_VALUE)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(tablePanel, javax.swing.GroupLayout.PREFERRED_SIZE, 469, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(actionPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap()))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(tablePanel, javax.swing.GroupLayout.PREFERRED_SIZE, 469, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(actionPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 482, Short.MAX_VALUE)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(27, 27, 27)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(tablePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 428, Short.MAX_VALUE)
-                        .addComponent(actionPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGap(27, 27, 27)))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(tablePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 428, Short.MAX_VALUE)
+                    .addComponent(actionPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -202,6 +207,33 @@ public class EmployeeView extends javax.swing.JPanel {
         controller.create(new PeopleModel(0, MainView.getUser().getID(), nameInput.getText(), cpfInput.getText(), phoneInput.getText(), PeopleModel.Role.CLIENT, description.getText()));
         updateView();
     }//GEN-LAST:event_addButtonActionPerformed
+
+    private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
+        if (JOptionPane.YES_OPTION != JOptionPane.showConfirmDialog(this, "Quer mesmo excluir esse registro e suas notas?")) return;
+        int index = table.getSelectedRow();
+        for (NoteModel note : NoteView.getInstance().getData()) {
+            if (note.getClientID() == data[index].getID()) NoteView.getInstance().getController().delete(note);
+        }
+        controller.delete(data[index]);
+        updateView();
+    }//GEN-LAST:event_deleteButtonActionPerformed
+
+    private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
+        int index = table.getSelectedRow();
+        PeopleModel oldData = data[table.getSelectedRow()];
+        PeopleModel newData = new PeopleModel(
+                oldData.getID(), 
+                MainView.getUser().getID(), 
+                nameInput.getText(), 
+                cpfInput.getText(), 
+                phoneInput.getText(), 
+                PeopleModel.Role.CLIENT, 
+                description.getText()
+        );
+        controller.update(oldData, newData);
+        updateView();
+        table.setRowSelectionInterval(index, index);
+    }//GEN-LAST:event_updateButtonActionPerformed
 
     private void clearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearButtonActionPerformed
         nameInput.setText("");
@@ -211,35 +243,25 @@ public class EmployeeView extends javax.swing.JPanel {
         table.clearSelection();
     }//GEN-LAST:event_clearButtonActionPerformed
 
-    private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
+    private void tableSelectionChange(ListSelectionEvent evt) {
+        boolean selected = table.getSelectedRow() > -1;
         int index = table.getSelectedRow();
-        PeopleModel oldData = data[table.getSelectedRow()];
-        PeopleModel newData = new PeopleModel(
-            oldData.getID(),
-            MainView.getUser().getID(),
-            nameInput.getText(),
-            cpfInput.getText(),
-            phoneInput.getText(),
-            PeopleModel.Role.EMPLOYEE,
-            description.getText()
-        );
-        controller.update(oldData, newData);
-        updateView();
-        table.setRowSelectionInterval(index, index);
-    }//GEN-LAST:event_updateButtonActionPerformed
-
-    private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
-        if (JOptionPane.YES_OPTION != JOptionPane.showConfirmDialog(this, "Quer mesmo excluir esse registro e suas notas?")) return;
-        int index = table.getSelectedRow();
-        controller.delete(data[index]);
-        updateView();
-    }//GEN-LAST:event_deleteButtonActionPerformed
-
+        addButton.setEnabled(!selected);
+        clearButton.setEnabled(selected);
+        updateButton.setEnabled(selected);
+        deleteButton.setEnabled(selected);
+        
+        nameInput.setText(selected ? data[index].getName() : "");
+        cpfInput.setText(selected ? data[index].getCPF(): "");
+        phoneInput.setText(selected ? data[index].getPhone() : "");
+        description.setText(selected ? data[index].getDescription() : "");
+    }
+    
     public void updateView() {
         PeopleModel[] peoples = controller.readAll();
         ArrayList<PeopleModel> tempData = new ArrayList<>();
         for (PeopleModel people : peoples) {
-            if (people.getRole() == PeopleModel.Role.EMPLOYEE) tempData.add(people);
+            if (people.getRole() == PeopleModel.Role.CLIENT) tempData.add(people);
         }
         
         data = tempData.toArray(new PeopleModel[tempData.size()]);
@@ -250,15 +272,15 @@ public class EmployeeView extends javax.swing.JPanel {
             tableModel.addRow(new String[] { String.valueOf(costumer.getID()), costumer.getName(), costumer.getCPF(), costumer.getPhone() });
         }
     }
-    
-    public static EmployeeView getInstance() {
+
+    public static CostumerView getInstance() {
         return instance;
     }
     
     public PeopleModel[] getData() {
-        return data;
+        return data != null ? data.clone() : new PeopleModel[0];
     }
-
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel actionPanel;
     private javax.swing.JButton addButton;
@@ -277,4 +299,5 @@ public class EmployeeView extends javax.swing.JPanel {
     private javax.swing.JScrollPane tablePanel;
     private javax.swing.JButton updateButton;
     // End of variables declaration//GEN-END:variables
+
 }
