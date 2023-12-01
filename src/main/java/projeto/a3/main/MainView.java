@@ -66,18 +66,6 @@ public class MainView extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         cardPanel.setLayout(new java.awt.CardLayout());
-
-        javax.swing.GroupLayout scheduleLayout = new javax.swing.GroupLayout(schedule);
-        schedule.setLayout(scheduleLayout);
-        scheduleLayout.setHorizontalGroup(
-            scheduleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 711, Short.MAX_VALUE)
-        );
-        scheduleLayout.setVerticalGroup(
-            scheduleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 439, Short.MAX_VALUE)
-        );
-
         cardPanel.add(schedule, "schedule");
 
         costumer.setName("costumer"); // NOI18N

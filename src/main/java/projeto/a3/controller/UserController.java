@@ -20,7 +20,7 @@ public class UserController extends AbstractController<UserModel> {
     @Override
     public void create(UserModel data) {
         Connection connection = ConnectionFactory.getConnection();
-        String query = "INSERT INTO users(name, password) VALUES (?, ?);";
+        String query = "INSERT INTO usuario(nome, senha) VALUES (?, ?);";
         try {
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, data.getName());
@@ -38,14 +38,14 @@ public class UserController extends AbstractController<UserModel> {
     
     public UserModel read(String name, String password) {
         Connection connection = ConnectionFactory.getConnection();
-        String query = "SELECT * FROM users WHERE name = ? AND password = ?;";
+        String query = "SELECT * FROM usuario WHERE nome = ? AND senha = ?;";
         try {
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, name);
             statement.setString(2, password);
             ResultSet queryResult = statement.executeQuery();
             if (queryResult.next()) {
-                return new UserModel(queryResult.getInt("id"), queryResult.getString("name"), queryResult.getString("password"));
+                return new UserModel(queryResult.getInt("id"), queryResult.getString("nome"), queryResult.getString("senha"));
             } else {
                 return null;
             }
@@ -63,7 +63,7 @@ public class UserController extends AbstractController<UserModel> {
     @Override
     public void update(UserModel lastData, UserModel newData) {
         Connection connection = ConnectionFactory.getConnection();
-        String query = "UPDATE users SET name = ?, password = ? WHERE id = ?;";
+        String query = "UPDATE usuario SET nome = ?, senha = ? WHERE id = ?;";
         try {
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, newData.getName());
@@ -78,7 +78,7 @@ public class UserController extends AbstractController<UserModel> {
     @Override
     public void delete(UserModel data) {
         Connection connection = ConnectionFactory.getConnection();
-        String query = "DELETE FROM users WHERE id = ?;";
+        String query = "DELETE FROM usuario WHERE id = ?;";
         try {
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setInt(1, data.getID());

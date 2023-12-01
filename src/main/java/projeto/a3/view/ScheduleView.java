@@ -4,17 +4,35 @@
  */
 package projeto.a3.view;
 
+import java.util.ArrayList;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.table.DefaultTableModel;
+import projeto.a3.controller.PeopleController;
+import projeto.a3.controller.ScheduleController;
+import projeto.a3.main.MainView;
+import projeto.a3.model.PeopleModel;
+import projeto.a3.model.ScheduleModel;
+import projeto.a3.utils.DateTime;
+
 /**
  *
  * @author pc
  */
 public class ScheduleView extends javax.swing.JPanel {
 
+    private ScheduleView instance;
+    private ScheduleController controller = new ScheduleController();
+    private ScheduleModel[] data = new ScheduleModel[0];
+    
     /**
      * Creates new form AgendaView
      */
     public ScheduleView() {
         initComponents();
+        updateView();
+        table.getSelectionModel().addListSelectionListener(e -> tableSelectionChange(e));
     }
 
     /**
@@ -26,21 +44,400 @@ public class ScheduleView extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        dialog = new javax.swing.JDialog();
+        dateLabel = new javax.swing.JLabel();
+        dateInput = new javax.swing.JTextField();
+        costumerLabel = new javax.swing.JLabel();
+        costumerComboBox = new javax.swing.JComboBox<>();
+        employeeLabel = new javax.swing.JLabel();
+        employeeComboBox = new javax.swing.JComboBox<>();
+        titleInput = new javax.swing.JTextField();
+        descriptionPanel = new javax.swing.JScrollPane();
+        descriptionInput = new javax.swing.JTextArea();
+        confirmButton = new javax.swing.JButton();
+        cancelarButton = new javax.swing.JButton();
+        tablePanel = new javax.swing.JScrollPane();
+        table = new javax.swing.JTable();
+        addButton = new javax.swing.JButton();
+        detailButton = new javax.swing.JButton();
+        deleteButton = new javax.swing.JButton();
+        updateButton = new javax.swing.JButton();
+
+        dialog.setMinimumSize(new java.awt.Dimension(400, 330));
+        dialog.setPreferredSize(new java.awt.Dimension(425, 270));
+
+        dateLabel.setText("Data");
+
+        dateInput.setToolTipText("xx/xx/xxxx xx:xx:xx");
+
+        costumerLabel.setText("Cliente");
+
+        costumerComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        costumerComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                costumerComboBoxActionPerformed(evt);
+            }
+        });
+
+        employeeLabel.setText("Funcionário");
+
+        employeeComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        titleInput.setToolTipText("Título");
+        titleInput.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                titleInputActionPerformed(evt);
+            }
+        });
+
+        descriptionInput.setColumns(20);
+        descriptionInput.setRows(5);
+        descriptionPanel.setViewportView(descriptionInput);
+
+        confirmButton.setText("Confirmar");
+        confirmButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                confirmButtonActionPerformed(evt);
+            }
+        });
+
+        cancelarButton.setText("Cancelar");
+        cancelarButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelarButtonActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout dialogLayout = new javax.swing.GroupLayout(dialog.getContentPane());
+        dialog.getContentPane().setLayout(dialogLayout);
+        dialogLayout.setHorizontalGroup(
+            dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(dialogLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(dialogLayout.createSequentialGroup()
+                        .addGroup(dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(dialogLayout.createSequentialGroup()
+                                .addComponent(dateLabel)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(dialogLayout.createSequentialGroup()
+                                .addComponent(dateInput, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)))
+                        .addGroup(dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dialogLayout.createSequentialGroup()
+                                .addComponent(costumerComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18))
+                            .addGroup(dialogLayout.createSequentialGroup()
+                                .addComponent(costumerLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addGroup(dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(employeeLabel)
+                            .addComponent(employeeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(descriptionPanel)
+                    .addComponent(titleInput, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(dialogLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(confirmButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cancelarButton, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
+        );
+        dialogLayout.setVerticalGroup(
+            dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(dialogLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(dateLabel)
+                    .addComponent(costumerLabel)
+                    .addComponent(employeeLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(dateInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(costumerComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(employeeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(titleInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(descriptionPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(dialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cancelarButton)
+                    .addComponent(confirmButton))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
         setName("schedule"); // NOI18N
+
+        table.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        tablePanel.setViewportView(table);
+
+        addButton.setText("Adicionar");
+        addButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addButtonActionPerformed(evt);
+            }
+        });
+
+        detailButton.setText("Detalhes");
+        detailButton.setEnabled(false);
+        detailButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                detailButtonActionPerformed(evt);
+            }
+        });
+
+        deleteButton.setText("Deletar");
+        deleteButton.setEnabled(false);
+        deleteButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteButtonActionPerformed(evt);
+            }
+        });
+
+        updateButton.setText("Atualizar");
+        updateButton.setEnabled(false);
+        updateButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updateButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(tablePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 574, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(addButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(detailButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(deleteButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(updateButton)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(tablePanel, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(addButton)
+                    .addComponent(detailButton)
+                    .addComponent(updateButton)
+                    .addComponent(deleteButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
+        updateDialog();
+        table.clearSelection();
+        dialog.setVisible(true);
+    }//GEN-LAST:event_addButtonActionPerformed
+
+    private void costumerComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_costumerComboBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_costumerComboBoxActionPerformed
+
+    private void titleInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_titleInputActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_titleInputActionPerformed
+
+    private void cancelarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelarButtonActionPerformed
+        dialog.setVisible(false);
+    }//GEN-LAST:event_cancelarButtonActionPerformed
+
+    private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
+        updateDialog();
+        ScheduleModel selected = data[table.getSelectedRow()];
+        dateInput.setText(selected.getDateTime().toString());
+        PeopleModel[] peoples = CostumerView.getController().readAll();
+        ArrayList<PeopleModel> tempData = new ArrayList();
+
+        for (PeopleModel people : peoples) {
+            if (people.getRole() == PeopleModel.Role.COSTUMER) tempData.add(people);
+        }
+        PeopleModel[] costumers = tempData.toArray(new PeopleModel[tempData.size()]);
+        for (int i=1; i<=costumers.length; i++) {
+            if (selected.getCostumerID() == i) {
+                costumerComboBox.setSelectedIndex(i);
+                break;
+            }
+        }
+        
+        for (PeopleModel people : peoples) {
+            if (people.getRole() == PeopleModel.Role.EMPLOYEE) tempData.add(people);
+        }
+        PeopleModel[] employers = tempData.toArray(new PeopleModel[tempData.size()]);
+        for (int i=1; i<=employers.length; i++) {
+            if (selected.getEmployeeID()== i) {
+                employeeComboBox.setSelectedIndex(i);
+                break;
+            }
+        }
+        titleInput.setText(selected.getTitle());
+        descriptionInput.setText(selected.getDescription());
+        dialog.setVisible(true);
+    }//GEN-LAST:event_updateButtonActionPerformed
+
+    private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
+        if (JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(this, "Deseja excluir esse registro?")) {
+            controller.delete(data[table.getSelectedRow()]);
+            updateView();
+        }
+    }//GEN-LAST:event_deleteButtonActionPerformed
+
+    private void confirmButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmButtonActionPerformed
+        if (table.getSelectedRow() > -1) {
+            PeopleModel[] peoples = CostumerView.getController().readAll();
+            ArrayList<PeopleModel> tempData = new ArrayList();
+
+            for (PeopleModel people : peoples) {
+                if (people.getRole() == PeopleModel.Role.COSTUMER) tempData.add(people);
+            }
+            PeopleModel[] costumers = tempData.toArray(new PeopleModel[tempData.size()]);
+
+            for (PeopleModel people : peoples) {
+                if (people.getRole() == PeopleModel.Role.EMPLOYEE) tempData.add(people);
+            }
+            PeopleModel[] employers = tempData.toArray(new PeopleModel[tempData.size()]);
+            controller.update(data[table.getSelectedRow()], new ScheduleModel(
+                    0, 
+                    MainView.getUser().getID(), 
+                    costumerComboBox.getSelectedIndex() > 0 ? costumers[costumerComboBox.getSelectedIndex() - 1].getID() : 0, 
+                    employeeComboBox.getSelectedIndex() > 0 ? employers[employeeComboBox.getSelectedIndex() - 1].getID() : 0, 
+                    titleInput.getText(), descriptionInput.getText(), 
+                    new DateTime(dateInput.getText().replace("/", "-"), true)));
+            updateView();
+            dialog.setVisible(false);
+        } else {
+            PeopleModel[] peoples = CostumerView.getController().readAll();
+            ArrayList<PeopleModel> tempData = new ArrayList();
+
+            for (PeopleModel people : peoples) {
+                if (people.getRole() == PeopleModel.Role.COSTUMER) tempData.add(people);
+            }
+            PeopleModel[] costumers = tempData.toArray(new PeopleModel[tempData.size()]);
+
+            for (PeopleModel people : peoples) {
+                if (people.getRole() == PeopleModel.Role.EMPLOYEE) tempData.add(people);
+            }
+            PeopleModel[] employers = tempData.toArray(new PeopleModel[tempData.size()]);
+            
+            controller.create(new ScheduleModel(
+                    0, 
+                    MainView.getUser().getID(), 
+                    costumerComboBox.getSelectedIndex() > 0 ? costumers[costumerComboBox.getSelectedIndex() - 1].getID() : 0, 
+                    employeeComboBox.getSelectedIndex() > 0 ? employers[employeeComboBox.getSelectedIndex() - 1].getID() : 0, 
+                    titleInput.getText(), descriptionInput.getText(), 
+                    new DateTime(dateInput.getText().replace("/", "-"), true)));
+            updateView();
+            dialog.setVisible(false);
+        }
+    }//GEN-LAST:event_confirmButtonActionPerformed
+
+    private void detailButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_detailButtonActionPerformed
+        ScheduleModel selected = data[table.getSelectedRow()];
+        PeopleController peopleController = CostumerView.getController();
+        PeopleModel costumer = peopleController.read(selected.getCostumerID());
+        PeopleModel employee = peopleController.read(selected.getEmployeeID());
+        JOptionPane.showMessageDialog(this, String.format(
+                "Data: %s\nTítulo: %s\nCliente: %s\nFuncionário: %s\nDescrição: %s", 
+                selected.getDateTime().toString(), selected.getTitle(), costumer != null ? costumer.getName() : "", employee != null ? employee.getName() : "", selected.getDescription()
+        ));
+    }//GEN-LAST:event_detailButtonActionPerformed
+
+    private void tableSelectionChange(ListSelectionEvent evt) {
+        boolean selected = table.getSelectedRow() > -1;
+        int index = table.getSelectedRow();
+        
+        detailButton.setEnabled(selected);
+        updateButton.setEnabled(selected);
+        deleteButton.setEnabled(selected);
+    }
+    
+    public void updateView() {
+        ScheduleModel[] schedules = controller.readAll();
+        data = schedules;
+        
+        String[] header = { "Data e Hora", "Titulo", "Cliente", "Funcionário" };
+        DefaultTableModel tableModel = new DefaultTableModel(header, 0);
+        PeopleController peopleController = CostumerView.getController();
+        for (ScheduleModel schedule : schedules) {
+            PeopleModel costumer = peopleController.read(schedule.getCostumerID());
+            PeopleModel employee = peopleController.read(schedule.getEmployeeID());
+            tableModel.addRow(new String[] { String.valueOf(schedule.getDateTime()), schedule.getTitle(), costumer != null ? costumer.getName() : "", employee != null ? employee.getName() : "" });
+        }
+        table.setModel(tableModel);
+    }
+    
+    public void updateDialog() {
+        PeopleModel[] peoples = CostumerView.getController().readAll();
+        ArrayList<PeopleModel> tempData = new ArrayList();
+        
+        for (PeopleModel people : peoples) {
+            if (people.getRole() == PeopleModel.Role.COSTUMER) tempData.add(people);
+        }
+        PeopleModel[] costumers = tempData.toArray(new PeopleModel[tempData.size()]);
+        
+        for (PeopleModel people : peoples) {
+            if (people.getRole() == PeopleModel.Role.EMPLOYEE) tempData.add(people);
+        }
+        PeopleModel[] employers = tempData.toArray(new PeopleModel[tempData.size()]);
+        
+        ArrayList<String> costumerOptions = new ArrayList<>();
+        costumerOptions.add("Nenhum");
+        for (PeopleModel costumer : costumers) costumerOptions.add(costumer.getName());
+        DefaultComboBoxModel costumerModel = new DefaultComboBoxModel(costumerOptions.toArray());
+        costumerComboBox.setModel(costumerModel);
+        
+        ArrayList<String> employeeOptions = new ArrayList<>();
+        employeeOptions.add("Nenhum");
+        for (PeopleModel employee : employers) employeeOptions.add(employee.getName());
+        DefaultComboBoxModel employeeModel = new DefaultComboBoxModel(employeeOptions.toArray());
+        employeeComboBox.setModel(employeeModel);
+        
+        dateInput.setText("01/01/0001 00:00:00");
+        costumerComboBox.setSelectedIndex(0);
+        employeeComboBox.setSelectedIndex(0);
+        titleInput.setText("");
+        descriptionInput.setText("");
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton addButton;
+    private javax.swing.JButton cancelarButton;
+    private javax.swing.JButton confirmButton;
+    private javax.swing.JComboBox<String> costumerComboBox;
+    private javax.swing.JLabel costumerLabel;
+    private javax.swing.JTextField dateInput;
+    private javax.swing.JLabel dateLabel;
+    private javax.swing.JButton deleteButton;
+    private javax.swing.JTextArea descriptionInput;
+    private javax.swing.JScrollPane descriptionPanel;
+    private javax.swing.JButton detailButton;
+    private javax.swing.JDialog dialog;
+    private javax.swing.JComboBox<String> employeeComboBox;
+    private javax.swing.JLabel employeeLabel;
+    private javax.swing.JTable table;
+    private javax.swing.JScrollPane tablePanel;
+    private javax.swing.JTextField titleInput;
+    private javax.swing.JButton updateButton;
     // End of variables declaration//GEN-END:variables
 }

@@ -85,14 +85,12 @@
                   <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="labelCPF" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="labelDescription" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Group type="103" alignment="0" groupAlignment="0" max="-2" attributes="0">
                           <Component id="cpfInput" alignment="0" max="32767" attributes="0"/>
                           <Component id="labelName" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="addButton" alignment="0" max="32767" attributes="0"/>
                           <Component id="updateButton" alignment="0" max="32767" attributes="0"/>
                           <Component id="deleteButton" alignment="0" max="32767" attributes="0"/>
-                          <Component id="descriptionPane" alignment="0" pref="0" max="32767" attributes="0"/>
                           <Component id="nameInput" alignment="0" max="32767" attributes="0"/>
                           <Component id="labelPhone" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="phoneInput" alignment="0" max="32767" attributes="0"/>
@@ -118,11 +116,7 @@
                   <Component id="labelPhone" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="phoneInput" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Component id="labelDescription" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Component id="descriptionPane" max="32767" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
                   <Component id="addButton" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="clearButton" min="-2" max="-2" attributes="0"/>
@@ -192,26 +186,6 @@
         </Component>
         <Component class="javax.swing.JTextField" name="phoneInput">
         </Component>
-        <Component class="javax.swing.JLabel" name="labelDescription">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Descri&#xe7;&#xe3;o"/>
-          </Properties>
-        </Component>
-        <Container class="javax.swing.JScrollPane" name="descriptionPane">
-          <AuxValues>
-            <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
-          </AuxValues>
-
-          <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
-          <SubComponents>
-            <Component class="javax.swing.JTextArea" name="description">
-              <Properties>
-                <Property name="columns" type="int" value="20"/>
-                <Property name="rows" type="int" value="5"/>
-              </Properties>
-            </Component>
-          </SubComponents>
-        </Container>
       </SubComponents>
     </Container>
   </SubComponents>

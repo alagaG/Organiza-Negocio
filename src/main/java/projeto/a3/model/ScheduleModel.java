@@ -14,20 +14,24 @@ public class ScheduleModel {
         
     private int id;
     private int userId;
-    private int clientId;
+    private int costumerId;
     private int employeeId;
     private String title;
     private String description;
     private DateTime date;
 
-    public ScheduleModel(int id, int userId, int clientId, int employeeId, String title, String description, String date) {
+    public ScheduleModel(int id, int userId, int clientId, int employeeId, String title, String description, DateTime date) {
         this.id = id;
         this.userId = userId;
-        this.clientId = clientId;
+        this.costumerId = clientId;
         this.employeeId = employeeId;
         this.title = title;
         this.description = description;
-        this.date = new DateTime(date);
+        this.date = date;
+    }
+    
+    public ScheduleModel(int id, int userId, int clientId, int employeeId, String title, String description, String date) {
+        this(id, userId, clientId, employeeId, title, description, new DateTime(date));
     }
 
     public int getID() {
@@ -38,8 +42,8 @@ public class ScheduleModel {
         return this.userId;
     }
     
-    public int getClientID() {
-        return this.clientId;
+    public int getCostumerID() {
+        return this.costumerId;
     }
     
     public int getEmployeeID() {

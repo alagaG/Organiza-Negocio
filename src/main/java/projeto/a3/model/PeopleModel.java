@@ -16,21 +16,19 @@ public class PeopleModel {
     private String cpf;
     private String phone;
     private Role role;
-    private String description;
     
     public enum Role {
-        CLIENT,
+        COSTUMER,
         EMPLOYEE
     }
 
-    public PeopleModel(int id, int userId, String name, String cpf, String phone, Role role, String description) {
+    public PeopleModel(int id, int userId, String name, String cpf, String phone, Role role) {
         this.id = id;
         this.userId = userId;
         this.name = name;
         this.cpf = cpf;
         this.phone = phone;
         this.role = role;
-        this.description = description;
     }
 
     public int getID() {
@@ -55,10 +53,6 @@ public class PeopleModel {
     
     public Role getRole() {
         return this.role;
-    }
-    
-    public String getDescription() {
-        return this.description;
     }
     
 }

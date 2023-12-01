@@ -23,7 +23,7 @@ import projeto.a3.model.PeopleModel;
 public class CostumerView extends javax.swing.JPanel {
 
     private static CostumerView instance;
-    private PeopleController controller = new PeopleController();
+    private static PeopleController controller = new PeopleController();
     private PeopleModel[] data = new PeopleModel[0];
     
     /**
@@ -58,9 +58,6 @@ public class CostumerView extends javax.swing.JPanel {
         cpfInput = new javax.swing.JTextField();
         labelPhone = new javax.swing.JLabel();
         phoneInput = new javax.swing.JTextField();
-        labelDescription = new javax.swing.JLabel();
-        descriptionPane = new javax.swing.JScrollPane();
-        description = new javax.swing.JTextArea();
 
         setName("client"); // NOI18N
 
@@ -123,12 +120,6 @@ public class CostumerView extends javax.swing.JPanel {
 
         labelPhone.setText("Telefone");
 
-        labelDescription.setText("Descrição");
-
-        description.setColumns(20);
-        description.setRows(5);
-        descriptionPane.setViewportView(description);
-
         javax.swing.GroupLayout actionPanelLayout = new javax.swing.GroupLayout(actionPanel);
         actionPanel.setLayout(actionPanelLayout);
         actionPanelLayout.setHorizontalGroup(
@@ -137,14 +128,12 @@ public class CostumerView extends javax.swing.JPanel {
                 .addGap(25, 25, 25)
                 .addGroup(actionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(labelCPF)
-                    .addComponent(labelDescription)
                     .addGroup(actionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(cpfInput)
                         .addComponent(labelName)
                         .addComponent(addButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(updateButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(deleteButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(descriptionPane, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                         .addComponent(nameInput)
                         .addComponent(labelPhone)
                         .addComponent(phoneInput)
@@ -166,11 +155,7 @@ public class CostumerView extends javax.swing.JPanel {
                 .addComponent(labelPhone)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(phoneInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(labelDescription)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(descriptionPane)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(addButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(clearButton)
@@ -204,7 +189,7 @@ public class CostumerView extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
-        controller.create(new PeopleModel(0, MainView.getUser().getID(), nameInput.getText(), cpfInput.getText(), phoneInput.getText(), PeopleModel.Role.CLIENT, description.getText()));
+        controller.create(new PeopleModel(0, MainView.getUser().getID(), nameInput.getText(), cpfInput.getText(), phoneInput.getText(), PeopleModel.Role.COSTUMER));
         updateView();
     }//GEN-LAST:event_addButtonActionPerformed
 
@@ -227,8 +212,7 @@ public class CostumerView extends javax.swing.JPanel {
                 nameInput.getText(), 
                 cpfInput.getText(), 
                 phoneInput.getText(), 
-                PeopleModel.Role.CLIENT, 
-                description.getText()
+                PeopleModel.Role.COSTUMER
         );
         controller.update(oldData, newData);
         updateView();
@@ -239,7 +223,6 @@ public class CostumerView extends javax.swing.JPanel {
         nameInput.setText("");
         cpfInput.setText("");
         phoneInput.setText("");
-        description.setText("");
         table.clearSelection();
     }//GEN-LAST:event_clearButtonActionPerformed
 
@@ -254,14 +237,13 @@ public class CostumerView extends javax.swing.JPanel {
         nameInput.setText(selected ? data[index].getName() : "");
         cpfInput.setText(selected ? data[index].getCPF(): "");
         phoneInput.setText(selected ? data[index].getPhone() : "");
-        description.setText(selected ? data[index].getDescription() : "");
     }
     
     public void updateView() {
         PeopleModel[] peoples = controller.readAll();
         ArrayList<PeopleModel> tempData = new ArrayList<>();
         for (PeopleModel people : peoples) {
-            if (people.getRole() == PeopleModel.Role.CLIENT) tempData.add(people);
+            if (people.getRole() == PeopleModel.Role.COSTUMER) tempData.add(people);
         }
         
         data = tempData.toArray(new PeopleModel[tempData.size()]);
@@ -277,6 +259,10 @@ public class CostumerView extends javax.swing.JPanel {
         return instance;
     }
     
+    public static PeopleController getController() {
+        return controller;
+    }
+    
     public PeopleModel[] getData() {
         return data != null ? data.clone() : new PeopleModel[0];
     }
@@ -287,10 +273,7 @@ public class CostumerView extends javax.swing.JPanel {
     private javax.swing.JButton clearButton;
     private javax.swing.JTextField cpfInput;
     private javax.swing.JButton deleteButton;
-    private javax.swing.JTextArea description;
-    private javax.swing.JScrollPane descriptionPane;
     private javax.swing.JLabel labelCPF;
-    private javax.swing.JLabel labelDescription;
     private javax.swing.JLabel labelName;
     private javax.swing.JLabel labelPhone;
     private javax.swing.JTextField nameInput;

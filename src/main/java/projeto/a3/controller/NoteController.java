@@ -21,7 +21,7 @@ public class NoteController extends AbstractController<NoteModel> {
     @Override
     public void create(NoteModel data) {
         Connection connection = ConnectionFactory.getConnection();
-        String query = "INSERT INTO notes(user_id, client_id, name, content) VALUES (?, ?, ?, ?);";
+        String query = "INSERT INTO anotacao (id_usuario, id_cliente, titulo, conteudo) VALUES (?, ?, ?, ?);";
         try {
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setInt(1, data.getUserID());
@@ -46,7 +46,7 @@ public class NoteController extends AbstractController<NoteModel> {
     @Override
     public NoteModel[] readAll() {
         Connection connection = ConnectionFactory.getConnection();
-        String query = "SELECT * FROM notes;";
+        String query = "SELECT * FROM anotacao;";
         try {
             PreparedStatement statement = connection.prepareStatement(query);
             ResultSet queryResult = statement.executeQuery();
@@ -54,10 +54,10 @@ public class NoteController extends AbstractController<NoteModel> {
             while (queryResult.next()) {
                 list.add(new NoteModel(
                     queryResult.getInt("id"), 
-                    queryResult.getInt("user_id"), 
-                    queryResult.getInt("client_id"), 
-                    queryResult.getString("name"), 
-                    queryResult.getString("content")
+                    queryResult.getInt("id_usuario"), 
+                    queryResult.getInt("id_cliente"), 
+                    queryResult.getString("titulo"), 
+                    queryResult.getString("conteudo")
                 ));
             }
             return list.toArray(new NoteModel[list.size()]);
@@ -70,7 +70,7 @@ public class NoteController extends AbstractController<NoteModel> {
     @Override
     public void update(NoteModel lastData, NoteModel newData) {
         Connection connection = ConnectionFactory.getConnection();
-        String query = "UPDATE notes SET client_id = ?, name = ?, content = ? WHERE id = ? AND user_id = ?;";
+        String query = "UPDATE anotacao SET id_cliente = ?, titulo = ?, conteudo = ? WHERE id = ? AND id_usuario = ?;";
         try {
             PreparedStatement statement = connection.prepareStatement(query);
             if (newData.getClientID() > 0) {
@@ -91,7 +91,7 @@ public class NoteController extends AbstractController<NoteModel> {
     @Override
     public void delete(NoteModel data) {
         Connection connection = ConnectionFactory.getConnection();
-        String query = "DELETE FROM notes WHERE id = ? AND user_id = ?;";
+        String query = "DELETE FROM anotacao WHERE id = ? AND id_usuario = ?;";
         try {
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setInt(1, data.getID());
@@ -104,7 +104,7 @@ public class NoteController extends AbstractController<NoteModel> {
     
     public void deleteAll(NoteModel data) {
         Connection connection = ConnectionFactory.getConnection();
-        String query = "DELETE FROM notes WHERE user_id = ?;";
+        String query = "DELETE FROM anotacao WHERE id_usuario = ?;";
         try {
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setInt(1, data.getUserID());

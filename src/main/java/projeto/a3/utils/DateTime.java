@@ -4,6 +4,7 @@
  */
 package projeto.a3.utils;
 
+import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,19 +31,29 @@ public class DateTime {
         this.second = second;
     }
     
-    public DateTime(String datetime) {
-        Pattern pattern = Pattern.compile("([\\d]+)-([\\d]+)-([\\d]+)T([\\d]+):([\\d]+):([\\d]+)Z");
+    public DateTime(String datetime, boolean invert) {
+        Pattern pattern = Pattern.compile("([\\d]+)-([\\d]+)-([\\d]+) ([\\d]+):([\\d]+):([\\d]+)");
         Matcher matcher = pattern.matcher(datetime);
-        this.year = Integer.parseInt(matcher.group(0));
-        this.month = Integer.parseInt(matcher.group(1));
-        this.day = Integer.parseInt(matcher.group(2));
-        this.hour = Integer.parseInt(matcher.group(3));
-        this.minute = Integer.parseInt(matcher.group(4));
-        this.second = Integer.parseInt(matcher.group(5));
+        MatchResult result = matcher.toMatchResult();
+        matcher.find();
+        this.year = Integer.parseInt(matcher.group(invert ? 3 : 1));
+        this.month = Integer.parseInt(matcher.group(2));
+        this.day = Integer.parseInt(matcher.group(invert ? 1 : 3));
+        this.hour = Integer.parseInt(matcher.group(4));
+        this.minute = Integer.parseInt(matcher.group(5));
+        this.second = Integer.parseInt(matcher.group(6));
+    }
+    
+    public DateTime(String datetime) {
+        this(datetime, false);
+    }
+    
+    public String toMySQL() {
+        return String.format("%04d-%02d-%02d %02d:%02d:%02d", year, day, month, hour, minute, second);
     }
     
     public String toString() {
-        return String.format("%d-%d-%d %d:%d:%d", year, month, day, hour, minute, second);
+        return String.format("%02d/%02d/%04d %02d:%02d:%02d", day, month, year, hour, minute, second);
     }
     
 }

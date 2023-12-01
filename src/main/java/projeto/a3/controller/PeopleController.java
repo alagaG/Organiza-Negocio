@@ -22,15 +22,14 @@ public class PeopleController extends AbstractController<PeopleModel> {
     @Override
     public void create(PeopleModel data) {
         Connection connection = ConnectionFactory.getConnection();
-        String query = "INSERT INTO peoples(user_id, name, cpf, telefone, description, role) VALUES (?, ?, ?, ?, ?, ?);";
+        String query = "INSERT INTO pessoa (id_usuario, nome, cpf, telefone, funcao) VALUES (?, ?, ?, ?, ?);";
         try {
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setInt(1, data.getUserID());
             statement.setString(2, data.getName());
             statement.setString(3, data.getCPF());
             statement.setString(4, data.getPhone());
-            statement.setString(5, data.getDescription());
-            statement.setString(6, data.getRole() == PeopleModel.Role.CLIENT ? "Client" : "Employee");
+            statement.setString(5, data.getRole() == PeopleModel.Role.COSTUMER ? "Cliente" : "Funcionario");
             statement.execute();
         } catch(Exception e) {
             e.printStackTrace();
@@ -39,14 +38,34 @@ public class PeopleController extends AbstractController<PeopleModel> {
 
     @Override
     public PeopleModel read(int id) {
-        String query = "SELECT * FROM peoples WHERE ";
-        return null;
+        Connection connection = ConnectionFactory.getConnection();
+        String query = "SELECT * FROM pessoa WHERE id = ?;";
+        try {
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setInt(1, id);
+            ResultSet queryResult = statement.executeQuery();
+            if (queryResult.next()) {
+                return new PeopleModel(
+                    queryResult.getInt("id"), 
+                    queryResult.getInt("id_usuario"), 
+                    queryResult.getString("nome"), 
+                    queryResult.getString("cpf"), 
+                    queryResult.getString("telefone"), 
+                    queryResult.getString("funcao").equals("Cliente") ? PeopleModel.Role.COSTUMER : PeopleModel.Role.EMPLOYEE
+                );
+            } else {
+                return null;
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
     
     @Override
     public PeopleModel[] readAll() { 
         Connection connection = ConnectionFactory.getConnection();
-        String query = "SELECT * FROM peoples;";
+        String query = "SELECT * FROM pessoa;";
         try {
             PreparedStatement statement = connection.prepareStatement(query);
             ResultSet queryResult = statement.executeQuery();
@@ -54,12 +73,11 @@ public class PeopleController extends AbstractController<PeopleModel> {
             while (queryResult.next()) {
                 list.add(new PeopleModel(
                     queryResult.getInt("id"), 
-                    queryResult.getInt("user_id"), 
-                    queryResult.getString("name"), 
+                    queryResult.getInt("id_usuario"), 
+                    queryResult.getString("nome"), 
                     queryResult.getString("cpf"), 
                     queryResult.getString("telefone"), 
-                    queryResult.getString("role").equals("Client") ? PeopleModel.Role.CLIENT : PeopleModel.Role.EMPLOYEE, 
-                    queryResult.getString("description")
+                    queryResult.getString("funcao").equals("Cliente") ? PeopleModel.Role.COSTUMER : PeopleModel.Role.EMPLOYEE
                 ));
             }
             return list.toArray(new PeopleModel[list.size()]);
@@ -72,15 +90,14 @@ public class PeopleController extends AbstractController<PeopleModel> {
     @Override
     public void update(PeopleModel lastData, PeopleModel newData) {
         Connection connection = ConnectionFactory.getConnection();
-        String query = "UPDATE peoples SET name = ?, cpf = ?, telefone = ?, description = ? WHERE id = ? AND user_id = ?;";
+        String query = "UPDATE pessoa SET nome = ?, cpf = ?, telefone = ? WHERE id = ? AND id_usuario = ?;";
         try {
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, newData.getName());
             statement.setObject(2, newData.getCPF());
             statement.setObject(3, newData.getPhone());
-            statement.setString(4, newData.getDescription());
-            statement.setInt(5, lastData.getID());
-            statement.setInt(6, lastData.getUserID());
+            statement.setInt(4, lastData.getID());
+            statement.setInt(5, lastData.getUserID());
             statement.execute();
         } catch(Exception e) {
             e.printStackTrace();
@@ -90,7 +107,7 @@ public class PeopleController extends AbstractController<PeopleModel> {
     @Override
     public void delete(PeopleModel data) {
         Connection connection = ConnectionFactory.getConnection();
-        String query = "DELETE FROM peoples WHERE id = ? AND user_id = ?;";
+        String query = "DELETE FROM pessoa WHERE id = ? AND id_usuario = ?;";
         try {
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setInt(1, data.getID());
